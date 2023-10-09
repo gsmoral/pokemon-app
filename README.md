@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/gsmoral/pokemon-app" rel="noopener" target="_blank"><img width="150" src="./source/app/favicon.ico" alt="Pokemon logo"></a>
+  <a href="https://github.com/gsmoral/pokemon-app" rel="noopener" target="_blank"><img width="150" src="./public/Pokeball_256.png" alt="Pokemon logo"></a>
 </p>
 
 <h1 align="center">Pokémon app</h1>
