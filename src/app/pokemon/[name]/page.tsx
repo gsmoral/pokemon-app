@@ -11,7 +11,8 @@ type Props = {
   }
 }
 
-export const PokemonCard = ({ params } : Props) => {
+const PokemonCard = ({ params } : Props ) => {
+
   const router = useRouter();
 
   const [data, setData] = useState<any>({});
