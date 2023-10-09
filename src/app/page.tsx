@@ -1,95 +1,60 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client'
+import { useContext, useEffect, useState } from 'react';
+import { GlobalContext } from '@/context';
+import PokemonList from '@/components/PokemonList';
+import { PokemonListResponse } from '@/types/types';
+import styles from './page.module.css';
+
 
 export default function Home() {
+
+  // Get and set pokemons data from context
+  const { pokemonList, updatePokemonList } = useContext( GlobalContext );
+
+  const [loading, setLoading] = useState(pokemonList?.results.length === 0 ? true : false); 
+  const [error, setError] = useState(false); 
+
+  // Get pokemons info from api
+  const fetchPokemons = async (path = 'https://pokeapi.co/api/v2/pokemon') => {
+    try {
+      // setLoading(true)
+      const res = await fetch(path);
+
+      if (res.status === 200) {
+        const response : PokemonListResponse = await res.json();
+        updatePokemonList(response)
+        setLoading(false)
+      } else {
+        setError(true);
+        setLoading(false);
+      }
+
+    } catch (error) {
+      setError(true);
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  // Load pokemons only if empty
+  useEffect(() => {
+    if (pokemonList?.results.length === 0) {
+      fetchPokemons();
+    }
+  }, [])
+
+  const handlePagination = (path : string) => {
+    fetchPokemons(path);
+  }
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      {loading && <p className={styles.message}>Cargando datos...</p>}
+      {!loading && error && <p className={styles.message}>Error obteniendo datos...</p>}
+      {!loading && !error && pokemonList?.results.length === 0 && <p className={styles.message}>No hay datos a mostrar...</p>}
+      {!loading && !error && pokemonList?.results.length > 0 && 
+        <PokemonList data={pokemonList} onPageChange={handlePagination} />
+      }
     </main>
   )
 }

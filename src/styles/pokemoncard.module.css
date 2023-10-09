@@ -1,0 +1,19 @@
+.cardContainer {
+  width: 100%;
+  padding: 10px 5px 10px 25px;
+}
+
+.card {
+  text-align: center;
+  position: relative;
+  padding: 10px 0;
+  border-radius: 4px;
+  background-color: #50aef61f;
+  -webkit-box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.1); 
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.card:hover {
+  background-color: #50aef638;
+}

@@ -1,0 +1,29 @@
+.container {
+  padding: 1rem;
+}
+
+.back {
+  cursor: pointer;
+}
+
+.message {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.card {
+  display: flex;
+  margin: 1rem 1rem 0 1rem;
+  padding: 1rem;
+  background-color: #50aef61f;
+  border-radius: 4px;
+
+  -webkit-box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.1); 
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  margin-top: 1rem;
+  margin-left: 3rem;
+}
