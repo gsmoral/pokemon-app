@@ -5,6 +5,7 @@ import { GlobalContext } from '@/context';
 import { PokemonListResponse } from '@/types/types';
 import PokemonCard from './PokemonCard';
 import styles from '@/styles/pokemonlist.module.css'
+import Pagination from './Pagination';
 
 type Props = {
   data: PokemonListResponse;
@@ -16,11 +17,18 @@ const PokemonList = ({ data, onPageChange } : Props) => {
   // Get and set the view type from context
   const { viewType, toggleView } = useContext( GlobalContext );
 
-  const { count , next, previous, results : pokemons } = data;
+  const { count , page, next, previous, results : pokemons } = data;
 
   const handlePageChange = (newPage: string) => {
     onPageChange(newPage);
   };
+
+  // Calculate offset from page number and create url
+  const handlePageNumber = (page : number | string) => {
+    const offset = Number.isInteger(page) ? (Number(page) - 1) * 20: 0;
+    const url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=20`;
+    onPageChange(url);
+  }
 
   return (
     <div className={styles.pokemon__list}>
@@ -55,10 +63,16 @@ const PokemonList = ({ data, onPageChange } : Props) => {
       ))}
     </div>
     <div className={styles.pokemon__list_pagination}>
-      <button className={styles.pagination_button} onClick={() => handlePageChange(previous ? previous : '')} disabled={previous == null}>
+      {/* <button className={styles.pagination_button} onClick={() => handlePageChange(previous ? previous : '')} disabled={previous == null}>
         ❮
       </button>
-      <button className={styles.pagination_button} onClick={() => handlePageChange(next)}>❯</button>
+      <button className={styles.pagination_button} onClick={() => handlePageChange(next)}>❯</button> */}
+      <Pagination
+        currentPage={page}
+        totalCount={count}
+        pageSize={20}
+        onPageChange={handlePageNumber}
+      />
     </div>
   </div>
   );

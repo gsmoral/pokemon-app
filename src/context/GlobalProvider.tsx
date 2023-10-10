@@ -11,6 +11,7 @@ export interface GlobalState {
 const UI_INITIAL_STATE: GlobalState = {
   viewType: 'list',
   pokemonList: {
+    page: 0,
     count: 0,
     next: '',
     results: []

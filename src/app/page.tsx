@@ -4,6 +4,7 @@ import { GlobalContext } from '@/context';
 import PokemonList from '@/components/PokemonList';
 import { PokemonListResponse } from '@/types/types';
 import styles from './page.module.css';
+import { getPageNumber } from '@/helpers/helpers';
 
 
 export default function Home() {
@@ -22,7 +23,10 @@ export default function Home() {
 
       if (res.status === 200) {
         const response : PokemonListResponse = await res.json();
-        updatePokemonList(response)
+        updatePokemonList({
+          ...response,
+          page: getPageNumber(response.next, 20, response.count)
+        })
         setLoading(false)
       } else {
         setError(true);
